@@ -1,32 +1,43 @@
 # In the Google Cloud platform, navigate to Vertex AI Workbench to managed notebooks and create a new notebook. Launch the new notebook.
 
 # you'll want to select either PySpark local kernel or Serverless Spark. install required dependencies:
+```python
 !pip install pyTigerGraph --user --quiet
 !pip install pyspark[sql] --user --quiet
+```
 
 # import libraries
+```python
 import pyTigerGraph as tg
 import json
 import pandas as pd
 import getpass
+```
 
 # specify credentials for your tigergraph instance
+```python
 host = "https://ce.i.tgcloud.io"
 graphname = "social"
 username = [your username]
 version = "3.0.5" #@param ["3.0.5", "3.0.0", "2.6.2"] {allow-input: true}
 useCert = True #@param {type:"boolean"}
+```
 
 # enter the password and secrets
+```python
 password = getpass.getpass()
 secret = getpass.getpass()
+```
 
 # create the connection
+```python
 conn = tg.TigerGraphConnection(host=host, graphname=graphname, username=username, password=password, gsqlSecret=secret)
 token = conn.getToken(secret, setToken=True)
 print(token)
+```
 
 # now get some data
+```python
 def getLoadedStats(limit=5):
   numPeople = conn.getVertexCount("person")
 
@@ -36,13 +47,17 @@ def getLoadedStats(limit=5):
   print(f"Our people are: {json.dumps(people, indent=2)}")
 
 getLoadedStats()
+```
 
 # your results may be different depending on what you are trying to do
+```python
 results = conn.getVerticesById("person", "Tom")
 print(json.dumps(results, indent=2))
+```
 
 # now use pyspark to read the data into a spark dataframe
 # Import the required classes and functions
+```python
 from pyspark.sql import SparkSession, Row
 
 # Initialize a SparkSession
@@ -71,5 +86,6 @@ df.write.json("./test1.json")
 
 # google cloud storage bucket - change to your unique name
 df.write.json("gs://tigergraph-bq/test1.json")
+```
 
 # now go to your cloud storage bucket, you should see a new folder created and the json files inside 
