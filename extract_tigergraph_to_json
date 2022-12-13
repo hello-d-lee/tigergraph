@@ -65,4 +65,11 @@ print(df.schema)
 # and look at the dataframe
 df.select("*").show()
 
+# next you'll want to output this dataframe to a json file - can either write to local directory or to a google cloud storage bucket
+# local directory
+df.write.json("./test1.json")
 
+# google cloud storage bucket - change to your unique name
+df.write.json("gs://tigergraph-bq/test1.json")
+
+# now go to your cloud storage bucket, you should see a new folder created and the json files inside 
